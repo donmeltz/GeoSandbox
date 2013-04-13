@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>geosandbox - config</title>
+</head>
+<body>
+<div id="page">
+    <div id="content">
+        <div id="menu">
+            <hr />
+            |<a href="index.html">home</a>| |<a href="config.html">config</a>| |<a href="ami.html">ami</a>| |<a href="docs.html">docs</a>| --- |<a href="http://www.donmeltz.com">www.donmeltz.com</a>|
+            <hr />
+        </div>
+        <div id="text">
+            <h1>Configuration</h1>
+            <h2>Setting up the GeoSandbox</h2>
+            <p>I've settled on the following process to set up a cloud server using <a href="https://aws.amazon.com/" title="Amazon Web Services" target="_blank">Amazon Web Services</a> (AWS). I use an <a href="http://www.ubuntu.com/" title="Ubuntu" target="_blank">Ubuntu</a> server operating system, with <a href="http://httpd.apache.org/" title="Apache Web Server" target="_blank">Apache</a> as the web server to host and deliver web pages and web applications. I use the <a href="http://opengeo.org/technology/suite/download/" title="OpenGeo Suite" target="_blank">OpenGeo Suite</a> as my main web mapping platform, which includes <a href="http://geoserver.org/display/GEOS/Welcome" title="GeoServer" target="_blank">GeoServer</a> as the spatial data publisher.</p>
+            <hr />
+            <h3>Set up an Ubuntu ami on AWS:</h3>
+            <p>Sign into the Amazon Web Services account: <a href="http://aws.amazon.com/" title="AWS Free Usage Tier" target="_blank">https://console.aws.amazon.com/console/home</a></p>
+            <p>Search for and install an appropriate ami from the Ubuntu Cloud Portal:<a href="http://cloud.ubuntu.com/ami/" title="Ubuntu Cloud Portal" target="_blank"> http://cloud.ubuntu.com/ami/</a> (in this case, us-east precise ebs) </p>
+            <ul>
+                <li>Click on the desired ami link (in this case, ami-a29943cb), which then opens the AWS Management Console Request Instances Wizard </li>
+                <li>Make sure the instance type is what you want (I've found that micro works in most cases, but the OpenGeo Suite v3.0 requires adding a swap file)</li>
+                <li>Pick an availability zone (important if you want to easily move things around)</li>
+                <li>Enable termination protection</li>
+                <li>Add a Name tag for easy reference</li>
+                <li>Create a new key pair and save to appropriate directory (or use an existing key pair)</li>
+                <li>Set up a new security group (or use and existing group) with the following ports open
+                    <ul>
+                        <li>22 (SSH - to connect via SCP, or SFTP)</li>
+                        <li>80 (HTTP - Apache)</li>
+                        <li>443 (HTTPS)</li>
+                        <li>8080 (HTTP - OpenGeo Suite, tomcat)</li>
+                        <li>5432 (PostGIS)</li>
+                        <li>54321 (PostGIS, used by OpenGeoSuite)</li>
+                        <li>3306 (MySQL)</li>
+                    </ul>
+                </li>
+                <li>Launch the new server</li>
+                <li>Add an Elastic IP to make it easier to connect to the server (just remember to reattach it every time the instance is stopped and restarted)</li>
+            </ul>
+            <p>Connect to the new server using ssh, or an ssh enabled client (e. g. WinSCP, SECpanel).</p>
+            <p>The default user is &quot;ubuntu&quot;. Passwords are not enabled by default.</p>
+            <hr />
+            <h3>Configure the Ubuntu operating system</h3>
+            <ul>
+                <li>Open a terminal window and enter:</li>
+            </ul>
+            <p class="code">sudo apt-get update</p>
+            <p class="code">sudo apt-get upgrade</p>
+            <h4>Give the default user (ubuntu) a password</h4>
+            <p class="code">sudo passwd ubuntu</p>
+            <h4>Enable Password Authorization</h4>
+            <ul>
+                <li> In a terminal window, open the sshd_config file in vi:</li>
+            </ul>
+            <p class="code"> sudo vi /etc/ssh/sshd_config</p>
+            <ul>
+                <li>Enter INSERT mode by typing &ldquo;a&rdquo;</li>
+                <li>Using the arrow keys on the keyboard, scroll down to the  line that reads </li>
+            </ul>
+            <p class="code">PasswordAuthentication no</p>
+            <ul>
+                <li>Right arrow over to the end of the line and backspace  twice to erase &ldquo;no&rdquo;</li>
+                <li>Type &ldquo;yes&rdquo;</li>
+                <li>Press the escape key on the keyboard to exit edit mode</li>
+                <li>Type &ldquo;:w&rdquo; and enter to save the file</li>
+                <li>Type &ldquo;:q&rdquo; and enter to exit VI</li>
+                <li>Apply the changes by restarting ssh</li>
+            </ul>
+            <p class="code">sudo /etc/init.d/ssh restart</p>
+            <h4>Add a swap file to overcome the memory limitations of a micro instance</h4>
+            <p>I've found that running the OpenGeo Suite on an AWS micro instance causes the tomcat server to quickly crash. Adding a swap file to the server appears to overcome this limitation.</p>
+            <ul>
+                <li>Create a 1 GB storage file
+                    <ul>
+                        <li>adjust the count= line to your liking</li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="code">sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576</p>
+            <ul>
+                <li>Turn this new file into a swap area</li>
+            </ul>
+            <p class="code">sudo mkswap /swapfile</p>
+            <ul>
+                <li>Set the file permissions appropriately</li>
+            </ul>
+            <p class="code">sudo chown root:root /swapfile</p>
+            <p class="code">sudo chmod 0600 /swapfile</p>
+            <ul>
+                <li>Activate the swap area every time the system reboots by editing fstab (again, using vi)</li>
+            </ul>
+            <p class="code">sudo vi /etc/fstab</p>
+            <ul>
+                <li>Enter INSERT mode by typing &ldquo;a&rdquo;</li>
+                <li>Move to the end of the file and then hit ENTER to make a new line</li>
+                <li>Add the following line:</li>
+            </ul>
+            <p class="code">/swapfile swap swap defaults 0 0</p>
+            <ul>
+                <li>Press the escape key to stop editing</li>
+                <li>Type &quot;:wq&quot; then enter to save and exit vi</li>
+                <li>Reboot the server</li>
+                <li>Verify the swap file is activated</li>
+            </ul>
+            <p class="code">free -m</p>
+            <hr />
+            <h3>Install and configure the  software</h3>
+            <h4>Install Apache server with MySQL and PHP</h4>
+            <ul>
+                <li>Open a terminal window and enter:</li>
+            </ul>
+            <p class="code">sudo apt-get install lamp-server^</p>
+            <ul>
+                <li>or, you install each element one at a time:</li>
+            </ul>
+            <blockquote>
+                <h4>Apache</h4>
+                <p class="code">sudo apt-get install apache2y</p>
+                <p class="code">sudo /etc/init.d/apache2 restart</p>
+            </blockquote>
+            <blockquote>
+                <h4>MySQL</h4>
+                <p class="code">sudo apt-get install mysql-server</p>
+            </blockquote>
+            <blockquote>
+                <h4>PHP</h4>
+                <p class="code">sudo apt-get install libapache2-mod-php5</p>
+                <p class="code">sudo a2enmod php5</p>
+                <p class="code">sudo service apache2 restart</p>
+            </blockquote>
+            <h4>Install the OpenGeo Suite</h4>
+            <p><em>(Note: The OpenGeo Suite install includes Geoserver and Postgresql/PostGIS)</em></p>
+            <ul>
+                <li>In a terminal window, sudo to root:</li>
+            </ul>
+            <p class="code">sudo su</p>
+            <ul>
+                <li>Import the OpenGeo GPG key:</li>
+            </ul>
+            <p class="code">wget -qO- http://apt.opengeo.org/gpg.key | apt-key add -</p>
+            <ul>
+                <li>Add the OpenGeo APT repository:</li>
+            </ul>
+            <p class="code">echo &quot;deb http://apt.opengeo.org/suite/v3/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list</p>
+            <ul>
+                <li>Update APT:</li>
+            </ul>
+            <p class="code"> apt-get update</p>
+            <ul>
+                <li>Search for packages from OpenGeo:</li>
+            </ul>
+            <p class="code"> apt-cache search opengeo</p>
+            <ul>
+                <li>If the search command does not return any results, the repository was not added properly. Examine the output of the apt commands for any errors or warnings.</li>
+                <li>Install the OpenGeo Suite package:</li>
+            </ul>
+            <p class="code"> apt-get install opengeo-suite</p>
+            <ul>
+                <li>Reboot the server</li>
+            </ul>
+            <h4>Install  Webmin via APT:  <a href="http://www.webmin.com/" target="_blank">http://www.webmin.com/</a></h4>
+            <ul>
+                <li>Use vi to edit the /etc/apt/sources.list file:</li>
+            </ul>
+            <p class="code">sudo vi /etc/apt/sources.list                </p>
+                <ul>
+                    <li>Add these two lines:</li>
+                </ul>
+                <p class="code">deb http://download.webmin.com/download/repository sarge contrib</p>
+            <p class="code">deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib</p>
+                <ul>
+                    <li>Install the GPG key with which the repository is  signed, using command line: </li>
+                </ul>
+                <p class="code">sudo wget http://www.webmin.com/jcameron-key.asc</p>
+            <p class="code">sudo apt-key add jcameron-key.asc</p>
+                <ul>
+                    <li>Install Webmin:</li>
+                </ul>
+                <p class="code">sudo apt-get update</p>
+            <p class="code">sudo apt-get install webmin            </p>
+            <p>Access Webmin in a browser: http://&lt;your_server_ip&gt;:10000</p>
+                <ul>
+                    <li>Username: root (or) &lt;username&gt;</li>
+                    <li>Password: &lt;usernamepassword&gt;</li>
+                </ul>
+            <hr />
+            <h3>Configure data directories, users, and access permissions </h3>
+            <h4>Website directories and users </h4>
+            <ul>
+                <li>Create a new group (www-pub) that will contain the user-editors of the website files</li>
+            </ul>
+            <p class="code">sudo groupadd www-pub</p>
+            <ul>
+                <li>Add users that will edit website files to the new group
+                    <ul>
+                        <li>use the &quot;-a&quot; switch to append to existing groups</li>
+                        <li>change the &quot;ubuntu&quot; user to whatever other user you want to add</li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="code">sudo usermod -a -G www-pub ubuntu</p>
+            <ul>
+                <li>Check by displaying all groups for a particular user</li>
+            </ul>
+            <p class="code">groups ubuntu</p>
+            <ul>
+                <li>Change the ownership of everything under /var/www to root:www-pub</li>
+            </ul>
+            <p class="code">sudo chown -R root:www-pub /var/www</p>
+            <ul>
+                <li>Change the permissions of the folders to 2775
+                    <ul>
+                        <li>Start with the /var/www folder:</li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="code">sudo chmod 2775 /var/www</p>
+            <ul>
+                <ul>
+                    <li>Use &quot;find&quot; to change the folders within /var/www to 2775</li>
+                </ul>
+            </ul>
+            <p class="code">sudo find /var/www -type d -exec chmod 2775 {} \;</p>
+            <ul>
+                <ul>
+                    <li>Then change the permissions of all the files within /var/www to 0664</li>
+                </ul>
+            </ul>
+            <p class="code">sudo find /var/www -type f -exec chmod 0664 {} \;</p>
+            <h4>Geo-data directories and users</h4>
+            <ul>
+                <li>Create a new group (geo-pub) that will contain the user-editors of the geodata files</li>
+            </ul>
+            <p class="code">sudo groupadd geo-pub</p>
+            <ul>
+                <li>Add users that will edit website files to the new group
+                    <ul>
+                        <li>Use the &quot;-a&quot; switch to append to existing groups</li>
+                        <li>Change the &quot;ubuntu&quot; user to whatever other user you want to add</li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="code">sudo usermod -a -G geo-pub ubuntu</p>
+            <ul>
+                <li>Check by displaying all groups for a particular user</li>
+            </ul>
+            <p class="code">groups ubuntu</p>
+            <ul>
+                <li>Change the ownership of everything under /usr/share/opengeo-suite-data to tomcat6:geo-pub</li>
+            </ul>
+            <p class="code">sudo chown -R tomcat6:geo-pub /usr/share/opengeo-suite-data</p>
+            <ul>
+                <li>Change the permissions of the folders to 2775
+                    <ul>
+                        <li>Start with the <span class="code">/usr/share/opengeo-suite-data</span>:</li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="code">sudo chmod 2775 /usr/share/opengeo-suite-data</p>
+            <ul>
+                <ul>
+                    <li>Use &quot;find&quot; to change the folders within /usr/share/opengeo-suite-data to 2775</li>
+                </ul>
+            </ul>
+            <p class="code">sudo find /usr/share/opengeo-suite-data -type d -exec chmod 2775 {} \;</p>
+            <ul>
+                <ul>
+                    <li>Then change the permissions of all the files within /usr/share/opengeo-suite-data to 0664</li>
+                </ul>
+            </ul>
+            <p class="code">sudo find /usr/share/opengeo-suite-data -type f -exec chmod 0664 {} \;</p>
+            <h4>&nbsp;</h4>
+            <h4>Configure users that will access Postgresql/PostGIS databases</h4>
+            <p>TODO</p>
+            <h4>Configure users that will access MySQL databases</h4>
+            <p>TODO</p>
+            <hr>
+            <h3>Test the installed software </h3>
+            <h4>Apache</h4>
+            <ul>
+                <li>Test the Apache2 default website:  http://&lt;YourAWSPublicDNSorIP&gt;</li>
+            </ul>
+            <h4>OpenGeo Suite</h4>
+            <ul>
+                <li>Test the OpenGeo Suite: http://&lt;YourAWSPublicDNSorIP&gt;:8080/dashboard/</li>
+                <li>Launch GeoExplorer from the dashboard</li>
+                <li>Save the default map and exit Geoexplorer</li>
+                <li>View the map at: http://&lt;YourAWSPublicDNSorIP&gt;/geoexplorer/viewer#maps/1</li>
+            </ul>
+            <h4>MySQL</h4>
+            <p>TODO</p>
+            <h4>Postgresql/PostGIS</h4>
+            <p>TODO</p>
+            <hr>
+            <p><em>Configuration last updated on 1/26/2013</em></p>
+            <hr />
+            <h2>Possible additional software and configurations </h2>
+            <h4>Install TileStream (Have not got this to work yet)</h4>
+            <blockquote>
+                <p>(https://github.com/mapbox/tilestream)</p>
+            </blockquote>
+            <ul>
+                <li>In a terminal window: </li>
+                <li>Install build requirements:</li>
+            </ul>
+            <p class="code">sudo apt-get install curl build-essential libssl-dev libsqlite3-0 libsqlite3-dev git-core </p>
+            <ul>
+                <li>Install node:</li>
+            </ul>
+            <p class="code">git clone --depth 1   git://github.com/joyent/node.git</p>
+            <p class="code">cd node</p>
+            <p class="code">git checkout v0.4.9</p>
+            <p class="code">export   JOBS=2 # optional, sets number of parallel commands.</p>
+            <p class="code">mkdir ~/local</p>
+            <p class="code">./configure --prefix=$HOME/local/node</p>
+            <p class="code">make</p>
+            <p class="code">make install</p>
+            <p class="code">echo 'export   PATH=$HOME/local/node/bin:$PATH' &gt;&gt; ~/.profile</p>
+            <p class="code">source ~/.profile</p>
+            <ul>
+                <li>Install npm: (not sure which one of the following lines to use)</li>
+            </ul>
+            <p class="code">curl http://npmjs.org/install.sh | sh</p>
+            <p class="code">sudo apt-get install npm</p>
+            <ul>
+                <li>Install TileStream:</li>
+            </ul>
+            <p class="code">npm install -g tilestream</p>
+            <p><em>Note from @notifyshane: @DonMeltz run 'npm install zlib' in /usr/local/lib/node_modules to fix the error. just figured it out. painful install on my mac.</em></p>
+            <h4>Set up FTP (SFTP):</h4>
+            <blockquote>
+                <p><a href="https://help.ubuntu.com/11.04/serverguide/C/ftp-server.html" target="_blank">https://help.ubuntu.com/11.04/serverguide/C/ftp-server.html</a></p>
+            </blockquote>
+            <p class="code">sudo apt-get install vsftpd</p>
+            <ul>
+                <li>Edit /etc/vsftpd.conf with these options:</li>
+            </ul>
+            <p class="code"># enable for standalone mode<br />
+                listen=YES<br />
+                tcp_wrappers=YES<br />
+                #<br />
+                # Access rights<br />
+                # Allow anonymous FTP?<br />
+                anonymous_enable=YES<br />
+                # Allow local users to log in<br />
+                local_enable=YES<br />
+                # Enable any form of FTP write command<br />
+                write_enable=YES<br />
+                # Default umask for local users is 077. Change this to 022<br />
+                local_umask=022<br />
+                #<br />
+                # Security<br />
+                force_dot_files=NO<br />
+                # Don't remap user name<br />
+                guest_enable=NO<br />
+                # Customize the login banner string<br />
+                ftpd_banner=Welcome to the UbuGeo FTP service<br />
+                # Limit user to browse their own directory only<br />
+                chroot_local_user=YES<br />
+                # Enable list of system / power users<br />
+                chroot_list_enable=YES<br />
+                # Actual list of system / power users<br />
+                chroot_list_file=/etc/vsftpd.chroot_list<br />
+                hide_ids=YES<br />
+                # pasv_min_port=50000<br />
+                # pasv_max_port=60000<br />
+                #<br />
+                # Features<br />
+                # Activate logging of uploads/downloads<br />
+                xferlog_enable=YES<br />
+                # Display directory listings with the time in&nbsp; your&nbsp;  local&nbsp; time&nbsp; zone<br />
+                use_localtime=YES<br />
+                ls_recurse_enable=NO<br />
+                ascii_download_enable=NO<br />
+                async_abor_enable=YES<br />
+                # Message greeting held in file .message or specify with  message_file=...<br />
+                dirmessage_enable=YES<br />
+                #<br />
+                # Performance<br />
+                one_process_model=NO<br />
+                idle_session_timeout=120<br />
+                data_connection_timeout=300<br />
+                accept_timeout=60<br />
+                connect_timeout=60<br />
+                max_per_ip=4<br />
+                #<br />
+                # nopriv_user=ftpsecure<br />
+                #<br />
+                # This option should be the name of a directory which is  empty<br />
+                # Also, the directory should not be writable by the ftp user<br />
+                # This directory is used as a secure chroot() jail at times  vsftpd does not require filesystem access<br />
+                secure_chroot_dir=/var/run/vsftpd/empty<br />
+                #<br />
+                # This string is the name of the PAM service vsftpd will  use.<br />
+                pam_service_name=vsftpd<br />
+                #userlist_enable=YES<br />
+                #<br />
+                # This option specifies the location of the RSA certificate  to use for SSL encrypted connections<br />
+                rsa_cert_file=/etc/ssl/private/vsftpd.pem</p>
+            <ul>
+                <li>Restart vsFTPd:</li>
+            </ul>
+            <p class="code">sudo restart vsftpd</p>
+            <hr>
+            <h4 class="postTitle">4 easy steps to enable remote desktop on your ubuntu ec2 instance</h4>
+            <p>Here are the easy steps:</p>
+            <p><strong>1) Install ubuntu desktop on your server instance</strong></p>
+            <ul>
+                <li>By default X server, GNOME etc is not installed on your ubuntu instance.</li>
+                <li>You can install it by simply executing the following commands:</li>
+            </ul>
+            <p class="code">export DEBIAN_FRONTEND=noninteractive</p>
+            <p class="code">sudo -E apt-get update</p>
+            <p class="code">sudo -E apt-get install -y ubuntu-desktop</p>
+            <p>It will install lot of stuff. So don’t get surprised if it takes 10 to 15 minutes to finish it. </p>
+            <p><strong>2) Install FreeNX server on your server</strong></p>
+            <ul>
+                <li>The following commands assume that you are using ubuntu 9.10 (Karmic Koala) image.</li>
+            </ul>
+            <p class="code">sudo add-apt-repository ppa:freenx-team</p>
+            <p class="code">sudo apt-get update</p>
+            <p class="code">sudo aptitude install -y freenx</p>
+            <p class="code">sudo /usr/lib/nx/nxsetup --install </p>
+            <ul>
+                <li>While executing the last command, you will get the following prompt:</li>
+                <li>It is recommended that you use the NoMachine key for easier setup.</li>
+                <li>If you answer "y", FreeNX creates a custom KeyPair and expects you to setup your clients manually.</li>
+                <li>"N" is default and uses the NoMachine key for installation.</li>
+                <li>I would say answer ‘N’ which is the default.</li>
+                <li>If you answer Y, you   will have to generate keys and put them at a specific location in the   client.</li>
+            </ul>
+            <p><strong>3) Enable password authentication on the ssh server</strong></p>
+            <ul>
+                <li>Edit  /etc/ssh/sshd_config and set PasswordAuthentication to yes.</li>
+                <li>By default password authentication is disabled.</li>
+                <li>You will need to restart ssh process by executing</li>
+            </ul>
+            <p class="code">sudo /etc/init.d/ssh restart</p>
+            <ul>
+                <li>Now that you have enabled password authentication, you should make   sure that the the user you are going to use for using remote desktop has   a password.</li>
+                <li>Cannonical’s karmic images come with ‘ubuntu’ user.</li>
+                <li>This   user does not have a password.</li>
+                <li>You can set a password by executing</li>
+            </ul>
+            <p class="code">sudo passwd ubuntu</p>
+            <p><strong>4) Install and setup NX client</strong></p>
+            <ul>
+                <li> Now install the NoMachineNX client on your Desktop.</li>
+                <li>You can download the client form <a href="http://www.nomachine.com/download.php">http://www.nomachine.com/download.php</a>.</li>
+                <li>You can install it by simply double clicking the downloaded file.</li>
+                <li>Once   you install it, click on the NX Connection wizard to setup a new   connection.</li>
+                <li>Fill in the values as shown below.</li>
+                <li>Make sure that you put in   your server address in the host field.</li>
+            </ul>
+            <p>And that’s it! NX client will create a desktop shortcut for the server   connection (Only if you choose to do so). Double click the shortcut,   fill in the username (ubuntu) and the password (set in step 3) and you   are in!</p>
+            <p>&nbsp;</p>
+            <div id="footer">
+                <hr />
+                This website is hosted on www.geosandbox.com | <a href="mailto:geosandbox1@gmail.com">geosabdbox1@gmail.com</a>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
