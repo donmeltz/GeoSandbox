@@ -1,17 +1,21 @@
+
+----------
+
 Configuration
 =================
+
+----------
 
 Setting up the GeoSandbox
 -------------------------
 
-I've settled on the following process to set up a cloud server using [Amazon Web Services](https://aws.amazon.com/ "Amazon Web Services") (AWS). I use an [Ubuntu](http://www.ubuntu.com/ "Ubuntu") server operating system, with [Apache](http://httpd.apache.org/ "Apache Web Server") as the web server to host and deliver web pages and web applications. I use the [OpenGeo Suite](http://opengeo.org/technology/suite/download/ "OpenGeo Suite") as my main web mapping platform, which includes [GeoServer](http://geoserver.org/display/GEOS/Welcome "GeoServer") as the spatial data publisher.
-
+I've settled on the following process to set up a cloud server using [Amazon Web Services](https://aws.amazon.com/) (AWS). I use an [Ubuntu](http://www.ubuntu.com/) server operating system, with [Apache](http://httpd.apache.org/) as the web server to host and deliver web pages and web applications. I use the [OpenGeo Suite](http://opengeo.org/products/suite/community/) as my main web mapping platform, which includes [GeoServer](http://geoserver.org/display/GEOS/Welcome) as the spatial data publisher.
 
 ### Set up an Ubuntu ami on AWS: ###
 
-Sign into the Amazon Web Services account: [https://console.aws.amazon.com/console/home](http://aws.amazon.com/ "AWS Free Usage Tier")
+Sign into the Amazon Web Services account: [https://console.aws.amazon.com/console/home](http://aws.amazon.com/)
 
-Search for and install an appropriate ami from the Ubuntu Cloud Portal:[ http://cloud.ubuntu.com/ami/](http://cloud.ubuntu.com/ami/ "Ubuntu Cloud Portal") (in this case, us-east precise ebs) 
+Search for and install an appropriate ami from the Ubuntu Cloud Portal:[ http://cloud.ubuntu.com/ami/](http://cloud.ubuntu.com/ami/) (in this case, us-east precise ebs) 
 
 -   Click on the desired ami link (in this case, ami-a29943cb), which then opens the AWS Management Console Request Instances Wizard*   Make sure the instance type is what you want (I've found that micro works in most cases, but the OpenGeo Suite v3.0 requires adding a swap file)
 -   Pick an availability zone (important if you want to easily move things around)
@@ -33,13 +37,13 @@ Connect to the new server using ssh, or an ssh enabled client (e. g. WinSCP, SEC
 
 The default user is &quot;ubuntu&quot;. Passwords are not enabled by default.
 
-
 ----------
 
 ### Configure the Ubuntu operating system ###
 
+----------
 
-Open a terminal window and enter:
+Open a terminal window and start by updating the system:
 
     sudo apt-get update
     sudo apt-get upgrade
@@ -89,7 +93,6 @@ Turn this new file into a swap area
 Set the file permissions appropriately
 
 	sudo chown root:root /swapfile
-
 	sudo chmod 0600 /swapfile
 
 Activate the swap area every time the system reboots by editing fstab (again, using vi)
@@ -108,6 +111,9 @@ Reboot the server
 Verify the swap file is activated
 
 	free -m
+
+
+----------
 
 ### Install and configure the  software ###
 
@@ -196,7 +202,11 @@ Access Webmin in a browser: http://&lt;your_server_ip&gt;:10000
 *   Username: root (or) &lt;username&gt;
 *   Password: &lt;usernamepassword&gt;
 
+----------
+
 ### Configure data directories, users, and access permissions ###
+
+----------
 
 #### Website directories and users ####
 
@@ -270,6 +280,8 @@ TODO
 
 ### Test the installed software ####
 
+----------
+
 #### Apache ####
 
 Test the Apache2 default website:  http://&lt;YourAWSPublicDNSorIP&gt;
@@ -291,11 +303,6 @@ TODO
 #### Postgresql/PostGIS ####
 
 TODO
-
-----------
-
-_Configuration last updated on 1/26/2013_
-
 
 ----------
 
