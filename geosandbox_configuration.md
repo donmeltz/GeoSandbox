@@ -38,10 +38,10 @@ The default user is &quot;ubuntu&quot;. Passwords are not enabled by default.
 
 ### Configure the Ubuntu operating system ###
 
-- Open a terminal window and enter:
+
+Open a terminal window and enter:
 
     sudo apt-get update
-
     sudo apt-get upgrade
 
 #### Give the default user (ubuntu) a password ####
@@ -50,64 +50,68 @@ The default user is &quot;ubuntu&quot;. Passwords are not enabled by default.
 
 #### Enable Password Authorization ####
 
-*   In a terminal window, open the sshd_config file in vi:
+In a terminal window, open the sshd_config file in vi:
 
- sudo vi /etc/ssh/sshd_config
+    sudo vi /etc/ssh/sshd_config
+    
+Enter INSERT mode by typing &ldquo;a&rdquo;
 
-*   Enter INSERT mode by typing &ldquo;a&rdquo;
-*   Using the arrow keys on the keyboard, scroll down to the  line that reads
+Using the arrow keys on the keyboard, scroll down to the  line that reads:
 
-PasswordAuthentication no
+    PasswordAuthentication no
 
-*   Right arrow over to the end of the line and backspace  twice to erase &ldquo;no&rdquo;
-*   Type &ldquo;yes&rdquo;
-*   Press the escape key on the keyboard to exit edit mode
-*   Type &ldquo;:w&rdquo; and enter to save the file
-*   Type &ldquo;:q&rdquo; and enter to exit VI
-*   Apply the changes by restarting ssh
+Right arrow over to the end of the line and backspace  twice to erase &ldquo;no&rdquo;
 
-sudo /etc/init.d/ssh restart
+Type &ldquo;yes&rdquo;
+
+Press the escape key on the keyboard to exit edit mode
+
+Type &ldquo;:w&rdquo; and enter to save the file
+
+Type &ldquo;:q&rdquo; and enter to exit VI
+
+Apply the changes by restarting ssh:
+
+    sudo /etc/init.d/ssh restart
 
 #### Add a swap file to overcome the memory limitations of a micro instance ####
 
 I've found that running the OpenGeo Suite on an AWS micro instance causes the tomcat server to quickly crash. Adding a swap file to the server appears to overcome this limitation.
 
-*   Create a 1 GB storage file
+Create a 1 GB storage file (adjust the count= line to your liking)
 
-    *   adjust the count= line to your liking
+	sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
 
-sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+Turn this new file into a swap area
 
-*   Turn this new file into a swap area
+	sudo mkswap /swapfile
 
-sudo mkswap /swapfile
+Set the file permissions appropriately
 
-*   Set the file permissions appropriately
+	sudo chown root:root /swapfile
 
-sudo chown root:root /swapfile
+	sudo chmod 0600 /swapfile
 
-sudo chmod 0600 /swapfile
+Activate the swap area every time the system reboots by editing fstab (again, using vi)
 
-*   Activate the swap area every time the system reboots by editing fstab (again, using vi)
+	sudo vi /etc/fstab
 
-sudo vi /etc/fstab
+Enter INSERT mode by typing &ldquo;a&rdquo;
+Move to the end of the file and then hit ENTER to make a new line
+Add the following line:
 
-*   Enter INSERT mode by typing &ldquo;a&rdquo;
-*   Move to the end of the file and then hit ENTER to make a new line
-*   Add the following line:
+	/swapfile swap swap defaults 0 0
 
-/swapfile swap swap defaults 0 0
+Press the escape key to stop editing
+Type &quot;:wq&quot; then enter to save and exit vi
+Reboot the server
+Verify the swap file is activated
 
-*   Press the escape key to stop editing
-*   Type &quot;:wq&quot; then enter to save and exit vi
-*   Reboot the server
-*   Verify the swap file is activated
-
-free -m
-
-* * *
+	free -m
 
 ### Install and configure the  software ###
+
+----------
 
 #### Install Apache server with MySQL and PHP ####
 
