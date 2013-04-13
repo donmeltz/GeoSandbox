@@ -3,6 +3,8 @@ Documentation
 
 This page is most definitely incomplete. I will be updating it as time allows.
 
+The purpose of this file is to document the user names, passwords, and data directories used by the various software programs installed on the system.
+
 Operating system
 ----------------
 

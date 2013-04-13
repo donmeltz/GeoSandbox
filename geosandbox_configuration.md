@@ -106,9 +106,14 @@ Add the following line:
 	/swapfile swap swap defaults 0 0
 
 Press the escape key to stop editing
+
 Type &quot;:wq&quot; then enter to save and exit vi
+
 Reboot the server
-Verify the swap file is activated
+
+	sudo reboot
+
+Verify the swap file is activated:
 
 	free -m
 
@@ -188,13 +193,11 @@ Add these two lines:
 Install the GPG key with which the repository is  signed, using command line:
 
 	sudo wget http://www.webmin.com/jcameron-key.asc
-
 	sudo apt-key add jcameron-key.asc
 
 Install Webmin:
 
 	sudo apt-get update
-
 	sudo apt-get install webmin            
 
 Access Webmin in a browser: http://&lt;your_server_ip&gt;:10000
@@ -233,9 +236,7 @@ Change the permissions of the folders to 2775
 Start with the /var/www folder:
 
 	sudo chmod 2775 /var/www
-
 	sudo find /var/www -type d -exec chmod 2775 {} \;
-
 	sudo find /var/www -type f -exec chmod 0664 {} \;
 
 #### Geo-data directories and users ####
@@ -263,9 +264,7 @@ Change the permissions of the folders to 2775
 Start with the <span class="code">/usr/share/opengeo-suite-data</span>:
 
 	sudo chmod 2775 /usr/share/opengeo-suite-data
-
 	sudo find /usr/share/opengeo-suite-data -type d -exec chmod 2775 {} \;
-
 	sudo find /usr/share/opengeo-suite-data -type f -exec chmod 0664 {} \;
 
 #### Configure users that will access Postgresql/PostGIS databases ####
@@ -306,7 +305,9 @@ TODO
 
 ----------
 
-## Possible additional software and configurations ##
+### Possible additional software and configurations ###
+
+----------
 
 #### Install TileStream (Have not got this to work yet)
 
