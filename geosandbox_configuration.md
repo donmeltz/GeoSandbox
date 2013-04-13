@@ -1,13 +1,8 @@
 Configuration
 =================
 
-----------
-
 Setting up the GeoSandbox
 -------------------------
-
-----------
-
 
 I've settled on the following process to set up a cloud server using [Amazon Web Services](https://aws.amazon.com/ "Amazon Web Services") (AWS). I use an [Ubuntu](http://www.ubuntu.com/ "Ubuntu") server operating system, with [Apache](http://httpd.apache.org/ "Apache Web Server") as the web server to host and deliver web pages and web applications. I use the [OpenGeo Suite](http://opengeo.org/technology/suite/download/ "OpenGeo Suite") as my main web mapping platform, which includes [GeoServer](http://geoserver.org/display/GEOS/Welcome "GeoServer") as the spatial data publisher.
 
@@ -25,12 +20,12 @@ Search for and install an appropriate ami from the Ubuntu Cloud Portal:[ http://
 -   Create a new key pair and save to appropriate directory (or use an existing key pair)
 -   Set up a new security group (or use and existing group) with the following ports open
 	-	22 (SSH - to connect via SCP, or SFTP)
--   80 (HTTP - Apache)
--   443 (HTTPS)
--   8080 (HTTP - OpenGeo Suite, tomcat)
--   5432 (PostGIS)
--   54321 (PostGIS, used by OpenGeoSuite)
--   3306 (MySQL)
+	-   80 (HTTP - Apache)
+	-   443 (HTTPS)
+	-   8080 (HTTP - OpenGeo Suite, tomcat)
+	-   5432 (PostGIS)
+	-   54321 (PostGIS, used by OpenGeoSuite)
+	-   3306 (MySQL)
 -   Launch the new server
 -   Add an Elastic IP to make it easier to connect to the server (just remember to reattach it every time the instance is stopped and restarted)
 
