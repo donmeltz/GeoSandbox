@@ -28,7 +28,7 @@ The GeoSandbox started life back in January of 2011 with a simple personal goal.
 
 ### The original GeoSandbox server: ###
 
-<p> <img src="img/GeoSandbox_Original.jpg" width="253" height="223" alt="GeoSandbox - the original prototype"></p>
+![GeoSandbox - the original prototype](http://www.geosandbox.com/img/GeoSandbox_Original.jpg)
 
 I started out with and old Dell Inspiron 600m laptop. It housed an Intel Pentium M 1.6 GHz processor with 1 GB of Ram running 32 bit Windows 7 Home Premium. If you want to read up on the details, you can take a look at a few of my blog posts, specifically:
 
@@ -45,17 +45,15 @@ GeoSandbox has gone through countless iterations, including moving from a Window
 
 ### The GeoSandbox server today: ###
 
-<img src="img/amazon-racks.jpg" width="308" height="216" alt="Amazon Racks" />
-
+![Amazon Racks](http://www.geosandbox.com/img/amazon-racks.jpg)
 
 For a more thorough description of this transition, take a look at these three blog posts:
 
-<a href="http://donmeltz.com/blog/index.php/2011/12/19/serving-maps-in-the-cloud-for-free-part-1/" title="Permalink to Serving Maps – in the Cloud – for Free (part 1)" rel="bookmark">Serving Maps – in the Cloud – for Free (part 1)</a>
+<a href="http://donmeltz.com/blog/serving-maps-in-the-cloud-for-free-part-1/" title="Permalink to Serving Maps – in the Cloud – for Free (part 1)" rel="bookmark">Serving Maps – in the Cloud – for Free (part 1)</a>
 
 <a href="http://donmeltz.com/blog/serving-maps-in-the-cloud-for-free-part-2/" title="Permalink to Serving Maps – in the Cloud – for Free (part 2)" rel="bookmark">Serving Maps – in the Cloud – for Free (part 2)</a>
 
 <a href="http://donmeltz.com/blog/serving-maps-in-the-cloud-for-free-part-3/" title="Permalink to Serving Maps – in the Cloud – for Free (part 3)" rel="bookmark">Serving Maps – in the Cloud – for Free (part 3)</a>
-
 
 
 In a sentence, I describe it as:
@@ -69,8 +67,8 @@ Who knows? My intentions are to continue adding other geospatial functionality. 
 
 ### How can you use it? ###
 
-I've outlined the specific steps needed to set up a GeoSandbox instance using an AWS server on the Configuration page. If you want to set one up for your own personal use, simple follow those steps.
+I've outlined the specific steps needed to set up a GeoSandbox instance using an AWS server in the [geosandbox_configuration](https://github.com/donmeltz/GeoSandbox/blob/master/geosandbox_configuration.md) file. If you want to set one up for your own personal use, simple follow that procedure.
 
-I've also begun investigating how to share AMIs of AWS instances. As it is now, I'm not sure an AMI is all that useful as the set up and configuration is fairly straight forward. However, if you want to use that as an option you can take a look at what I've got so far on the AMI page.
+I've also begun investigating how to share AMIs of AWS instances. As it is now, I'm not sure an AMI is all that useful as the set up and configuration is fairly straight forward. However, if you want to use that as an option you can take a look at what I've got so far on the AMI page (TODO).
 
-Once you've got a GeoSandbox set up, take a look at the Documentation page to see brief descriptions of the installed software, a list of pertinent default users, passwords, and other settings. 
+Once you've got a GeoSandbox set up, take a look at the Documentation page (TODO) to see brief descriptions of the installed software, a list of pertinent default users, passwords, and other settings. 

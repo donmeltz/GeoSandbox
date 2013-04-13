@@ -115,153 +115,148 @@ Verify the swap file is activated
 
 #### Install Apache server with MySQL and PHP ####
 
-*   Open a terminal window and enter:
+Open a terminal window and enter:
 
-sudo apt-get install lamp-server^
+	sudo apt-get install lamp-server^
 
-*   or, you install each element one at a time:
-            > #### Apache
+> or, you can install each element one at a time:
 > 
-> sudo apt-get install apache2y
+> ##### Apache #####
 > 
-> sudo /etc/init.d/apache2 restart
-            > #### MySQL
+> 	sudo apt-get install apache2y
+> 	sudo /etc/init.d/apache2 restart
 > 
-> sudo apt-get install mysql-server
-            > #### PHP
+> ##### MySQL #####
 > 
-> sudo apt-get install libapache2-mod-php5
+> 	sudo apt-get install mysql-server
 > 
-> sudo a2enmod php5
+> ##### PHP #####
 > 
-> sudo service apache2 restart
+> 	sudo apt-get install libapache2-mod-php5
+> 	sudo a2enmod php5
+> 	sudo service apache2 restart
 
 #### Install the OpenGeo Suite ####
 
 _(Note: The OpenGeo Suite install includes Geoserver and Postgresql/PostGIS)_
 
-*   In a terminal window, sudo to root:
+In a terminal window, sudo to root:
 
-sudo su
+	sudo su
 
-*   Import the OpenGeo GPG key:
+Import the OpenGeo GPG key:
 
-wget -qO- http://apt.opengeo.org/gpg.key | apt-key add -
+	wget -qO- http://apt.opengeo.org/gpg.key | apt-key add -
 
-*   Add the OpenGeo APT repository:
+Add the OpenGeo APT repository:
 
-echo &quot;deb http://apt.opengeo.org/suite/v3/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list
+	echo &quot;deb http://apt.opengeo.org/suite/v3/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list
 
-*   Update APT:
+Update APT:
 
- apt-get update
+	apt-get update
 
-*   Search for packages from OpenGeo:
+Search for packages from OpenGeo:
 
- apt-cache search opengeo
+	apt-cache search opengeo
 
-*   If the search command does not return any results, the repository was not added properly. Examine the output of the apt commands for any errors or warnings.
-*   Install the OpenGeo Suite package:
+If the search command does not return any results, the repository was not added properly. Examine the output of the apt commands for any errors or warnings.
 
- apt-get install opengeo-suite
+Install the OpenGeo Suite package:
 
-*   Reboot the server
+	apt-get install opengeo-suite
+
+Reboot the server
 
 #### Install  Webmin via APT:  [http://www.webmin.com/](http://www.webmin.com/) ####
 
-*   Use vi to edit the /etc/apt/sources.list file:
+Use vi to edit the /etc/apt/sources.list file:
 
-sudo vi /etc/apt/sources.list                
+	sudo vi /etc/apt/sources.list                
 
-*   Add these two lines:
+Add these two lines:
 
-deb http://download.webmin.com/download/repository sarge contrib
+	deb http://download.webmin.com/download/repository sarge contrib
+	deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib
 
-deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib
+Install the GPG key with which the repository is  signed, using command line:
 
-*   Install the GPG key with which the repository is  signed, using command line:
+	sudo wget http://www.webmin.com/jcameron-key.asc
 
-sudo wget http://www.webmin.com/jcameron-key.asc
+	sudo apt-key add jcameron-key.asc
 
-sudo apt-key add jcameron-key.asc
+Install Webmin:
 
-*   Install Webmin:
+	sudo apt-get update
 
-sudo apt-get update
-
-sudo apt-get install webmin            
+	sudo apt-get install webmin            
 
 Access Webmin in a browser: http://&lt;your_server_ip&gt;:10000
 
 *   Username: root (or) &lt;username&gt;
 *   Password: &lt;usernamepassword&gt;
 
-* * *
-
 ### Configure data directories, users, and access permissions ###
 
 #### Website directories and users ####
 
-*   Create a new group (www-pub) that will contain the user-editors of the website files
+Create a new group (www-pub) that will contain the user-editors of the website files
 
-sudo groupadd www-pub
+	sudo groupadd www-pub
 
-*   Add users that will edit website files to the new group
+Add users that will edit website files to the new group
 
-    *   use the &quot;-a&quot; switch to append to existing groups
-*   change the &quot;ubuntu&quot; user to whatever other user you want to add
+use the &quot;-a&quot; switch to append to existing groups. Change the &quot;ubuntu&quot; user to whatever other user you want to add
 
-sudo usermod -a -G www-pub ubuntu
+	sudo usermod -a -G www-pub ubuntu
 
-*   Check by displaying all groups for a particular user
+Check by displaying all groups for a particular user
 
-groups ubuntu
+	groups ubuntu
 
-*   Change the ownership of everything under /var/www to root:www-pub
+Change the ownership of everything under /var/www to root:www-pub
 
-sudo chown -R root:www-pub /var/www
+	sudo chown -R root:www-pub /var/www
 
-*   Change the permissions of the folders to 2775
+Change the permissions of the folders to 2775
 
-    *   Start with the /var/www folder:
+Start with the /var/www folder:
 
-sudo chmod 2775 /var/www
+	sudo chmod 2775 /var/www
 
-sudo find /var/www -type d -exec chmod 2775 {} \;
+	sudo find /var/www -type d -exec chmod 2775 {} \;
 
-sudo find /var/www -type f -exec chmod 0664 {} \;
+	sudo find /var/www -type f -exec chmod 0664 {} \;
 
 #### Geo-data directories and users ####
 
-*   Create a new group (geo-pub) that will contain the user-editors of the geodata files
+Create a new group (geo-pub) that will contain the user-editors of the geodata files
 
-sudo groupadd geo-pub
+	sudo groupadd geo-pub
 
-*   Add users that will edit website files to the new group
+Add users that will edit website files to the new group
 
-    *   Use the &quot;-a&quot; switch to append to existing groups
-*   Change the &quot;ubuntu&quot; user to whatever other user you want to add
+Use the &quot;-a&quot; switch to append to existing groups. Change the &quot;ubuntu&quot; user to whatever other user you want to add
 
-sudo usermod -a -G geo-pub ubuntu
+	sudo usermod -a -G geo-pub ubuntu
 
-*   Check by displaying all groups for a particular user
+Check by displaying all groups for a particular user
 
-groups ubuntu
+	groups ubuntu
 
-*   Change the ownership of everything under /usr/share/opengeo-suite-data to tomcat6:geo-pub
+Change the ownership of everything under /usr/share/opengeo-suite-data to tomcat6:geo-pub
 
-sudo chown -R tomcat6:geo-pub /usr/share/opengeo-suite-data
+	sudo chown -R tomcat6:geo-pub /usr/share/opengeo-suite-data
 
-*   Change the permissions of the folders to 2775
+Change the permissions of the folders to 2775
 
-    *   Start with the <span class="code">/usr/share/opengeo-suite-data</span>:
+Start with the <span class="code">/usr/share/opengeo-suite-data</span>:
 
-sudo chmod 2775 /usr/share/opengeo-suite-data
+	sudo chmod 2775 /usr/share/opengeo-suite-data
 
-sudo find /usr/share/opengeo-suite-data -type d -exec chmod 2775 {} \;
+	sudo find /usr/share/opengeo-suite-data -type d -exec chmod 2775 {} \;
 
-sudo find /usr/share/opengeo-suite-data -type f -exec chmod 0664 {} \;
-
+	sudo find /usr/share/opengeo-suite-data -type f -exec chmod 0664 {} \;
 
 #### Configure users that will access Postgresql/PostGIS databases ####
 
@@ -271,20 +266,23 @@ TODO
 
 TODO
 
-* * *
+----------
 
 ### Test the installed software ####
 
 #### Apache ####
 
-*   Test the Apache2 default website:  http://&lt;YourAWSPublicDNSorIP&gt;
+Test the Apache2 default website:  http://&lt;YourAWSPublicDNSorIP&gt;
 
 #### OpenGeo Suite ####
 
-*   Test the OpenGeo Suite: http://&lt;YourAWSPublicDNSorIP&gt;:8080/dashboard/
-*   Launch GeoExplorer from the dashboard
-*   Save the default map and exit Geoexplorer
-*   View the map at: http://&lt;YourAWSPublicDNSorIP&gt;/geoexplorer/viewer#maps/1
+Test the OpenGeo Suite: http://&lt;YourAWSPublicDNSorIP&gt;:8080/dashboard/
+
+Launch GeoExplorer from the dashboard
+
+Save the default map and exit Geoexplorer
+
+View the map at: http://&lt;YourAWSPublicDNSorIP&gt;/geoexplorer/viewer#maps/1
 
 #### MySQL ####
 
@@ -294,128 +292,129 @@ TODO
 
 TODO
 
-* * *
+----------
 
 _Configuration last updated on 1/26/2013_
 
-* * *
+
+----------
 
 ## Possible additional software and configurations ##
 
 #### Install TileStream (Have not got this to work yet)
 
-            > (https://github.com/mapbox/tilestream)
+(https://github.com/mapbox/tilestream)
 
-*   In a terminal window:*   Install build requirements:
+In a terminal window - Install build requirements:
 
-sudo apt-get install curl build-essential libssl-dev libsqlite3-0 libsqlite3-dev git-core 
+	sudo apt-get install curl build-essential libssl-dev libsqlite3-0 libsqlite3-dev git-core 
 
-*   Install node:
+Install node:
 
-git clone --depth 1   git://github.com/joyent/node.git
+	git clone --depth 1   git://github.com/joyent/node.git
 
-cd node
+	cd node
 
-git checkout v0.4.9
+	git checkout v0.4.9
 
-export   JOBS=2 # optional, sets number of parallel commands.
+	export   JOBS=2 # optional, sets number of parallel commands.
 
-mkdir ~/local
+	mkdir ~/local
 
-./configure --prefix=$HOME/local/node
+	./configure --prefix=$HOME/local/node
 
-make
+	make
 
-make install
+	make install
 
-echo 'export   PATH=$HOME/local/node/bin:$PATH' &gt;&gt; ~/.profile
+	echo 'export   PATH=$HOME/local/node/bin:$PATH' &gt;&gt; ~/.profile
 
-source ~/.profile
+	source ~/.profile
 
-*   Install npm: (not sure which one of the following lines to use)
+Install npm: (not sure which one of the following lines to use)
 
-curl http://npmjs.org/install.sh | sh
+	curl http://npmjs.org/install.sh | sh
 
-sudo apt-get install npm
+	sudo apt-get install npm
 
-*   Install TileStream:
+Install TileStream:
 
-npm install -g tilestream
+	npm install -g tilestream
 
 _Note from @notifyshane: @DonMeltz run 'npm install zlib' in /usr/local/lib/node_modules to fix the error. just figured it out. painful install on my mac._
 
 #### Set up FTP (SFTP): ####
 
-            > [https://help.ubuntu.com/11.04/serverguide/C/ftp-server.html](https://help.ubuntu.com/11.04/serverguide/C/ftp-server.html)
+[https://help.ubuntu.com/11.04/serverguide/C/ftp-server.html](https://help.ubuntu.com/11.04/serverguide/C/ftp-server.html)
 
-sudo apt-get install vsftpd
+	sudo apt-get install vsftpd
 
-*   Edit /etc/vsftpd.conf with these options:
+Edit /etc/vsftpd.conf with these options:
 
 enable for standalone mode
 
-                listen=YES
-                tcp_wrappers=YES
-                #
-                # Access rights
-                # Allow anonymous FTP?
-                anonymous_enable=YES
-                # Allow local users to log in
-                local_enable=YES
-                # Enable any form of FTP write command
-                write_enable=YES
-                # Default umask for local users is 077. Change this to 022
-                local_umask=022
-                #
-                # Security
-                force_dot_files=NO
-                # Don't remap user name
-                guest_enable=NO
-                # Customize the login banner string
-                ftpd_banner=Welcome to the UbuGeo FTP service
-                # Limit user to browse their own directory only
-                chroot_local_user=YES
-                # Enable list of system / power users
-                chroot_list_enable=YES
-                # Actual list of system / power users
-                chroot_list_file=/etc/vsftpd.chroot_list
-                hide_ids=YES
-                # pasv_min_port=50000
-                # pasv_max_port=60000
-                #
-                # Features
-                # Activate logging of uploads/downloads
-                xferlog_enable=YES
-                # Display directory listings with the time in&nbsp; your&nbsp;  local&nbsp; time&nbsp; zone
-                use_localtime=YES
-                ls_recurse_enable=NO
-                ascii_download_enable=NO
-                async_abor_enable=YES
-                # Message greeting held in file .message or specify with  message_file=...
-                dirmessage_enable=YES
-                #
-                # Performance
-                one_process_model=NO
-                idle_session_timeout=120
-                data_connection_timeout=300
-                accept_timeout=60
-                connect_timeout=60
-                max_per_ip=4
-                #
-                # nopriv_user=ftpsecure
-                #
-                # This option should be the name of a directory which is  empty
-                # Also, the directory should not be writable by the ftp user
-                # This directory is used as a secure chroot() jail at times  vsftpd does not require filesystem access
-                secure_chroot_dir=/var/run/vsftpd/empty
-                #
-                # This string is the name of the PAM service vsftpd will  use.
-                pam_service_name=vsftpd
-                #userlist_enable=YES
-                #
-                # This option specifies the location of the RSA certificate  to use for SSL encrypted connections
-                rsa_cert_file=/etc/ssl/private/vsftpd.pem
+                    listen=YES
+    tcp_wrappers=YES
+    #
+    # Access rights
+    # Allow anonymous FTP?
+    anonymous_enable=YES
+    # Allow local users to log in
+    local_enable=YES
+    # Enable any form of FTP write command
+    write_enable=YES
+    # Default umask for local users is 077. Change this to 022
+    local_umask=022
+    #
+    # Security
+    force_dot_files=NO
+    # Don't remap user name
+    guest_enable=NO
+    # Customize the login banner string
+    ftpd_banner=Welcome to the UbuGeo FTP service
+    # Limit user to browse their own directory only
+    chroot_local_user=YES
+    # Enable list of system / power users
+    chroot_list_enable=YES
+    # Actual list of system / power users
+    chroot_list_file=/etc/vsftpd.chroot_list
+    hide_ids=YES
+    # pasv_min_port=50000
+    # pasv_max_port=60000
+    #
+    # Features
+    # Activate logging of uploads/downloads
+    xferlog_enable=YES
+    # Display directory listings with the time in&nbsp; your&nbsp;  local&nbsp; time&nbsp; zone
+    use_localtime=YES
+    ls_recurse_enable=NO
+    ascii_download_enable=NO
+    async_abor_enable=YES
+    # Message greeting held in file .message or specify with  message_file=...
+    dirmessage_enable=YES
+    #
+    # Performance
+    one_process_model=NO
+    idle_session_timeout=120
+    data_connection_timeout=300
+    accept_timeout=60
+    connect_timeout=60
+    max_per_ip=4
+    #
+    # nopriv_user=ftpsecure
+    #
+    # This option should be the name of a directory which is  empty
+    # Also, the directory should not be writable by the ftp user
+    # This directory is used as a secure chroot() jail at times  vsftpd does not require filesystem access
+    secure_chroot_dir=/var/run/vsftpd/empty
+    #
+    # This string is the name of the PAM service vsftpd will  use.
+    pam_service_name=vsftpd
+    #userlist_enable=YES
+    #
+    # This option specifies the location of the RSA certificate  to use for SSL encrypted connections
+    rsa_cert_file=/etc/ssl/private/vsftpd.pem
+    
+Restart vsFTPd:
 
-*   Restart vsFTPd:
-
-sudo restart vsftpd
+	sudo restart vsftpd
