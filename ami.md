@@ -1,5 +1,4 @@
-GeoSandbox AMI 
-===============
+# GeoSandbox AMI #
 
 In order to save myself some time every time I want to start from scratch with a new, clean instance of the GeoSandbox, I've saved it as an AMI. This is a copy, or "image" of the GeoSandbox that I can just spin up, rather than going through all of the individual steps outlined on the Configuration page.
 
@@ -9,8 +8,7 @@ If you'd like to use this as an option, too, I've made it publicly available thr
 
 If you use this AMI, and find any flaws in my procedure, or have some advice on how to make it more useful, please feel free to send me a note. I apreciate any feedback you can supply.
 
-Some notes before you decide to go this route:
-----------------------------------------------
+## Some notes before you decide to go this route: ##
 
 - This is an exact copy of the GeoSandbox that I've set up using the steps on the Configuration page.
 - This is NOT a secure server.

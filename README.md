@@ -1,8 +1,6 @@
-GeoSandbox
-==========
+# GeoSandbox #
 
-What is it?
------------
+## What is it? ##
 
 GeoSandbox is a personal playground; an online environment where I can try out the latest server and geo-centric software, and experiment with various website configurations and datasets. It's a safe place where I don't have to worry about what happens if something goes awry and brings the whole system down.
 
@@ -39,8 +37,7 @@ I started out with and old Dell Inspiron 600m laptop. It housed an Intel Pentium
 
 [GeoSandbox grows up to be a “Real boy”](http://www.donmeltz.com/geosandbox-grows-up-to-be-a-real-boy/)
 
-Where is it now?
-----------------
+## Where is it now? ##
 
 GeoSandbox has gone through countless iterations, including moving from a Windows/IIS environment, to Ubuntu/Apache. The most recent change has been a move into the cloud, still Ubuntu/Apache, but using Amazon Web Services.
 
@@ -61,8 +58,7 @@ In a sentence, I describe it as:
 
 > A geo-centric cloud-based web-server using Amazon Web Services (AWS) 
 
-Where will it go? 
-------------------
+## Where will it go? ##
 
 Who knows? My intentions are to continue adding other geospatial functionality. I would like to get TileStream (or some other mbtiles server) set up so I can test how that works with TileMill. I'd also like to add some javascript libraries like leaflet, so I can experiment with them in setting up a custom web-map client.
 

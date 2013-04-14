@@ -1,13 +1,6 @@
+# Configuration #
 
-----------
-
-Configuration
-=================
-
-----------
-
-Setting up the GeoSandbox
--------------------------
+## Setting up the GeoSandbox ##
 
 I've settled on the following process to set up a cloud server using [Amazon Web Services](https://aws.amazon.com/) (AWS). I use an [Ubuntu](http://www.ubuntu.com/) server operating system, with [Apache](http://httpd.apache.org/) as the web server to host and deliver web pages and web applications. I use the [OpenGeo Suite](http://opengeo.org/products/suite/community/) as my main web mapping platform, which includes [GeoServer](http://geoserver.org/display/GEOS/Welcome) as the spatial data publisher.
 
@@ -37,11 +30,7 @@ Connect to the new server using ssh, or an ssh enabled client (e. g. WinSCP, SEC
 
 The default user is &quot;ubuntu&quot;. Passwords are not enabled by default.
 
-----------
-
 ### Configure the Ubuntu operating system ###
-
-----------
 
 Open a terminal window and start by updating the system:
 
@@ -117,12 +106,7 @@ Verify the swap file is activated:
 
 	free -m
 
-
-----------
-
 ### Install and configure the  software ###
-
-----------
 
 #### Install Apache server with MySQL and PHP ####
 
@@ -205,11 +189,7 @@ Access Webmin in a browser: http://&lt;your_server_ip&gt;:10000
 *   Username: root (or) &lt;username&gt;
 *   Password: &lt;usernamepassword&gt;
 
-----------
-
 ### Configure data directories, users, and access permissions ###
-
-----------
 
 #### Website directories and users ####
 
@@ -267,11 +247,7 @@ Start with the <span class="code">/usr/share/opengeo-suite-data</span>:
 	sudo find /usr/share/opengeo-suite-data -type d -exec chmod 2775 {} \;
 	sudo find /usr/share/opengeo-suite-data -type f -exec chmod 0664 {} \;
 
-----------
-
 ### Test the installed software ####
-
-----------
 
 #### Apache ####
 

@@ -1,30 +1,18 @@
 # TODO #
 
-Things to wrap up in the configuration, documentation, and ideas for additional software and functionality.
+Things to wrap up in the configuration and documentation, and ideas for additional software and functionality.
 
 ## Configuration ##
 
-----------
-
 ### Configure the Ubuntu operating system ###
 
-----------
-
 Nothing yet
-
-----------
 
 ### Install and configure the  software ###
 
-----------
-
 Nothing yet
 
-----------
-
 ### Configure data directories, users, and access permissions ###
-
-----------
 
 #### Configure users that will access Postgresql/PostGIS databases ####
 
@@ -34,11 +22,7 @@ TODO
 
 TODO
 
-----------
-
 ### Test the installed software ####
-
-----------
 
 #### MySQL ####
 
@@ -47,8 +31,6 @@ TODO
 #### Postgresql/PostGIS ####
 
 TODO
-
-----------
 
 ## Documentation ##
 
@@ -61,8 +43,6 @@ TODO
 ### PostGIS 2.0 ###
 
 TODO
-
-## Other software: ##
 
 ### PostgreSQL 9.1 ###
 
@@ -80,18 +60,13 @@ TODO
 
 TODO
 
-
 ## Additional Software and Functionality ##
 
-----------
-
-### Possible additional software and configurations ###
-
-----------
+(This section might be pulled out into another file at some point, depending on how long it gets.)
 
 #### Install TileStream (Have not got this to work yet)
 
-(https://github.com/mapbox/tilestream)
+https://github.com/mapbox/tilestream
 
 In a terminal window - Install build requirements:
 
