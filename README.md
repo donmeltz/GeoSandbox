@@ -68,7 +68,7 @@ Who knows? My intentions are to continue adding other geospatial functionality. 
 
 ### How can you use it? ###
 
-I've outlined the specific steps needed to set up a GeoSandbox instance using an AWS server in the [geosandbox_configuration](https://github.com/donmeltz/GeoSandbox/blob/master/geosandbox_configuration.md) file. If you want to set one up for your own personal use, simple follow that procedure.
+I've outlined the specific steps needed to set up a GeoSandbox instance using an AWS server in the [geosandbox_configuration](https://github.com/donmeltz/GeoSandbox/blob/master/geosandbox_configuration.md) file. If you want to set one up for your own personal use, simply follow that procedure.
 
 I've also begun investigating how to share AMIs of AWS instances. As it is now, I'm not sure an AMI is all that useful as the set up and configuration is fairly straight forward. However, if you want to use that as an option you can take a look at what I've got so far in the [AMI file](https://github.com/donmeltz/GeoSandbox/blob/master/ami.md).
 
