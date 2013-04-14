@@ -1,12 +1,10 @@
-Documentation
-=============
+# Documentation #
 
 This page is most definitely incomplete. I will be updating it as time allows.
 
 The purpose of this file is to document the user names, passwords, and data directories used by the various software programs installed on the system.
 
-Operating system
-----------------
+## Operating system ##
 
 ### Ubuntu 12.04 ###
 
@@ -28,8 +26,7 @@ where <newuser> is the name you want to use for the new user.
 
 Enter a password when asked, and any of the other optional information
 
-Web server 
------------
+## Web server ##
 
 ### Apache 2.2 ###
 
@@ -43,8 +40,7 @@ To add users to the www-pub group, use the following command:
 
 	sudo usermod -a -G www-pub <newuser>
 
-Geo services 
--------------
+## Geo services ##
 
 ### Open GeoSuite 3.0 ###
 
@@ -69,30 +65,3 @@ Password: geoserver
 Default user: admin
 
 Password: geoserver
-
-### GeoWebCache 1.3 ###
-
-TODO
-
-### PostGIS 2.0 ###
-
-TODO
-
-Other software:
---------------- 
-
-### PostgreSQL 9.1 ###
-
-TODO
-
-### MySQL 5.5.24 ###
-
-TODO
-
-### PHP 5 ###
-
-TODO
-
-### Python 2.7.3 ###
-
-TODO
